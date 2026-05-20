@@ -4,23 +4,37 @@ This is an n8n community node for [Easyparser](https://easyparser.com) — a pow
 
 ## Features
 
-With this node you can extract structured data from Amazon across 19+ marketplaces. Supported operations include:
+With this node you can extract structured data from Amazon across 19+ marketplaces. The operations are organized into three main categories exactly as they appear in the Easyparser API Playground:
 
+### 1. Product Data
 | Operation | Description |
 |---|---|
 | **Product Detail** | Full product info: title, price, images, reviews, variants |
 | **Product Offers** | All seller offers and pricing for a product |
-| **Search** | Search results by keyword or URL |
-| **Product Lookup** | Convert EAN / UPC / GTIN to Amazon ASIN |
 | **Sales Analysis History** | 12-month sales history and trend data |
 | **Best Sellers Rank** | BSR data for a product |
 | **Package Dimension** | Physical dimensions and weight |
+
+### 2. Search & Discovery
+| Operation | Description |
+|---|---|
+| **Search** | Search results by keyword or URL |
+| **Product Lookup** | Convert EAN / UPC / GTIN to Amazon ASIN |
+| **Category** | Get category information |
+
+### 3. Seller Data
+| Operation | Description |
+|---|---|
 | **Seller Profile** | Seller info and feedback history |
 | **Seller Products** | All products listed by a seller |
 | **Seller Feedback** | Feedback history for a seller |
-| **Customer Reviews** | Customer reviews for a product |
-| **Category** | Get category information |
+
+### Account Data
+| Operation | Description |
+|---|---|
 | **Account Info** | Get your account plan and credit usage details |
+
+*(Note: Customer Reviews operation is currently not active in the Playground and has been removed from this list, but remains supported in the node for backward compatibility if needed.)*
 
 ## Advanced Parameters
 

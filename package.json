@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-easyparser",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "n8n community node for Easyparser - Amazon product data extraction API",
   "keywords": [
     "n8n-community-node-package",
@@ -35,10 +35,10 @@
   "n8n": {
     "n8nNodesApiVersion": 1,
     "credentials": [
-      "dist/credentials/EasyParserApi.credentials.js"
+      "dist/credentials/EasyparserApi.credentials.js"
     ],
     "nodes": [
-      "dist/nodes/EasyParser/EasyParser.node.js"
+      "dist/nodes/Easyparser/Easyparser.node.js"
     ]
   },
   "devDependencies": {
