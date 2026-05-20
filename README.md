@@ -25,7 +25,6 @@ With this node you can extract structured data from Amazon across 19+ marketplac
 | **—** | | | |
 | **Search & Discovery** | Search | Search products | Search results by keyword or URL |
 | | Product Lookup | Look up product by identifier | Convert EAN / UPC / GTIN / ISBN to Amazon ASIN |
-| | Category | Get category | Category information by Node ID |
 | **—** | | | |
 | **Seller Data** | Seller Profile | Get seller profile | Seller info and ratings |
 | | Seller Products | Get seller products | All products listed by a seller |

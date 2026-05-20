@@ -67,13 +67,7 @@ export class Easyparser implements INodeType {
 						description: 'Submit a batch of requests to the Bulk API for async processing',
 						action: 'Submit bulk request',
 					},
-					{
-						name: 'Category',
-						value: 'Category',
-						description: 'Get category information',
-						action: 'Get category',
-					},
-					{
+				{
 						name: 'Package Dimension',
 						value: 'PACKAGE_DIMENSION',
 						description: 'Get physical dimensions and weight of a product',
@@ -257,22 +251,7 @@ export class Easyparser implements INodeType {
 				},
 			},
 
-			// ─── Category ID (Category) ─────────
-			{
-				displayName: 'Category ID',
-				name: 'categoryId',
-				type: 'string',
-				default: '',
-				required: true,
-				description: 'Amazon Category ID (Node ID)',
-				displayOptions: {
-					show: {
-						operation: ['Category'],
-					},
-				},
-			},
-
-			// ─── BULK SUBMIT fields ──────────────────────────────────────────────
+							// ─── BULK SUBMIT fields ──────────────────────────────────────────────
 			{
 				displayName: 'Bulk Operation Type',
 				name: 'bulkOperation',
@@ -462,7 +441,7 @@ export class Easyparser implements INodeType {
 						description: 'Whether to exclude refinements from search results',
 						displayOptions: {
 							show: {
-								'/operation': ['Search', 'Seller_Products', 'Category'],
+								'/operation': ['Search', 'Seller_Products'],
 							},
 						},
 					},
@@ -508,7 +487,7 @@ export class Easyparser implements INodeType {
 						description: 'Maximum page number for paginated results',
 						displayOptions: {
 							show: {
-								'/operation': ['Search', 'Offer', 'Seller_Products', 'Seller_Feedback', 'Category'],
+								'/operation': ['Search', 'Offer', 'Seller_Products', 'Seller_Feedback'],
 							},
 						},
 					},
@@ -534,7 +513,7 @@ export class Easyparser implements INodeType {
 						description: 'Minimum page number for paginated results',
 						displayOptions: {
 							show: {
-								'/operation': ['Search', 'Offer', 'Seller_Products', 'Seller_Feedback', 'Category'],
+								'/operation': ['Search', 'Offer', 'Seller_Products', 'Seller_Feedback'],
 							},
 						},
 					},
@@ -605,7 +584,7 @@ export class Easyparser implements INodeType {
 						description: 'Custom refinements string',
 						displayOptions: {
 							show: {
-								'/operation': ['Search', 'Seller_Products', 'Category'],
+								'/operation': ['Search', 'Seller_Products'],
 							},
 						},
 					},
@@ -799,10 +778,6 @@ export class Easyparser implements INodeType {
 					} else {
 						qs.seller_id = sellerIdOrUrl;
 					}
-				} else if (operation === 'Category') {
-					const categoryId = this.getNodeParameter('categoryId', i) as string;
-					if (!categoryId) throw new NodeOperationError(this.getNode(), 'Category ID is required', { itemIndex: i });
-					qs.category_id = categoryId;
 				}
 
 				// Optional parameters
