@@ -366,7 +366,7 @@ export class Easyparser implements INodeType {
 				displayName: 'Bulk Additional Options',
 				name: 'bulkAdditionalOptions',
 				type: 'collection',
-				placeholder: 'Add Option',
+				placeholder: 'Add option',
 				default: {},
 				displayOptions: {
 					show: {
@@ -405,7 +405,7 @@ export class Easyparser implements INodeType {
 				displayName: 'Additional Options',
 				name: 'additionalOptions',
 				type: 'collection',
-				placeholder: 'Add Option',
+				placeholder: 'Add option',
 				default: {},
 				displayOptions: {
 					hide: {
