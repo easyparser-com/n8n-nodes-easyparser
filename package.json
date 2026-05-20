@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-easyparser",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "Extract structured Amazon product data using Easyparser API. Get product details, offers, search results, and seller data across 19+ marketplaces.",
   "keywords": [
     "n8n-community-node-package",
