@@ -5,9 +5,9 @@ import {
 	INodeProperties,
 } from 'n8n-workflow';
 
-export class EasyParserApi implements ICredentialType {
-	name = 'easyParserApi';
-	displayName = 'EasyParser API';
+export class EasyparserApi implements ICredentialType {
+	name = 'easyparserApi';
+	displayName = 'Easyparser API';
 	documentationUrl = 'https://easyparser.gitbook.io/easyparser-documentation/';
 	properties: INodeProperties[] = [
 		{
@@ -17,7 +17,7 @@ export class EasyParserApi implements ICredentialType {
 			typeOptions: { password: true },
 			default: '',
 			required: true,
-			description: 'Your EasyParser API key. Get it from https://app.easyparser.com',
+			description: 'Your Easyparser API key. Get it from https://app.easyparser.com',
 		},
 	];
 
@@ -33,14 +33,8 @@ export class EasyParserApi implements ICredentialType {
 	test: ICredentialTestRequest = {
 		request: {
 			baseURL: 'https://realtime.easyparser.com',
-			url: '/v1/request',
-			qs: {
-				platform: 'AMZ',
-				domain: '.com',
-				asin: 'B0F25371FH',
-				output: 'json',
-				operation: 'DETAIL',
-			},
+			url: '/v1/account',
+			qs: {},
 		},
 	};
 }

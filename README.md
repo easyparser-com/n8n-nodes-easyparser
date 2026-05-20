@@ -1,10 +1,10 @@
 # n8n-nodes-easyparser
 
-This is an n8n community node for [EasyParser](https://easyparser.com) — a powerful Amazon product data extraction API.
+This is an n8n community node for [Easyparser](https://easyparser.com) — a powerful Amazon product data extraction API.
 
 ## Features
 
-With this node you can extract structured data from Amazon across 19+ marketplaces:
+With this node you can extract structured data from Amazon across 19+ marketplaces. Supported operations include:
 
 | Operation | Description |
 |---|---|
@@ -12,11 +12,25 @@ With this node you can extract structured data from Amazon across 19+ marketplac
 | **Product Offers** | All seller offers and pricing for a product |
 | **Search** | Search results by keyword or URL |
 | **Product Lookup** | Convert EAN / UPC / GTIN to Amazon ASIN |
-| **Sales Analysis** | 12-month sales history and trend data |
+| **Sales Analysis History** | 12-month sales history and trend data |
 | **Best Sellers Rank** | BSR data for a product |
-| **Package Dimensions** | Physical dimensions and weight |
+| **Package Dimension** | Physical dimensions and weight |
 | **Seller Profile** | Seller info and feedback history |
 | **Seller Products** | All products listed by a seller |
+| **Seller Feedback** | Feedback history for a seller |
+| **Customer Reviews** | Customer reviews for a product |
+| **Category** | Get category information |
+| **Account Info** | Get your account plan and credit usage details |
+
+## Advanced Parameters
+
+All API parameters available in the [Easyparser Playground](https://app.easyparser.com/playground) are supported via the **Additional Options** section:
+- Pagination (`minPage`, `maxPage`)
+- Custom filters and refinements
+- A+ Content extraction
+- Custom `cookie` and `addressId` injection
+- Sorting (`shortBy`)
+- Language and Currency overrides
 
 ## Installation
 
@@ -28,7 +42,7 @@ n8n-nodes-easyparser
 
 ## Credentials
 
-You need an **EasyParser API key**. Get yours at [app.easyparser.com](https://app.easyparser.com).
+You need an **Easyparser API key**. Get yours at [app.easyparser.com](https://app.easyparser.com).
 
 ## Supported Marketplaces
 

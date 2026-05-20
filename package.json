@@ -1,7 +1,7 @@
 {
   "name": "n8n-nodes-easyparser",
-  "version": "0.1.0",
-  "description": "n8n community node for EasyParser - Amazon product data extraction API",
+  "version": "0.2.0",
+  "description": "n8n community node for Easyparser - Amazon product data extraction API",
   "keywords": [
     "n8n-community-node-package",
     "easyparser",
@@ -13,7 +13,7 @@
   "license": "MIT",
   "homepage": "https://easyparser.com",
   "author": {
-    "name": "EasyParser",
+    "name": "Easyparser",
     "email": "info@easyparser.com"
   },
   "repository": {
