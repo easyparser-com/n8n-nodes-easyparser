@@ -127,18 +127,38 @@ value: 'SELLER_PROFILE',
 
 			// ─── Amazon Domain (Real-Time operations) ────────────────────────────────────────────
 			{
-				displayName: 'Amazon Domain',
-				name: 'domain',
-				type: 'string',
-				default: '.com',
-				placeholder: '.com',
-				description: 'The Amazon marketplace domain to query (e.g. .com, .co.uk, .de, .fr, .it, .es, .ca, .co.jp, .com.au, .in, .ae, .sa, .nl, .pl, .se, .com.tr, .sg, .com.mx, .com.br)',
-				displayOptions: {
-					hide: {
-						operation: ['ACCOUNT_INFO', 'BULK_SUBMIT', 'BULK_GET_RESULT'],
+					displayName: 'Amazon Domain',
+					name: 'domain',
+					type: 'options',
+					default: '.com',
+					description: 'The Amazon marketplace domain extension to query',
+					options: [
+						{ name: '.ae (UAE)', value: '.ae' },
+						{ name: '.ca (Canada)', value: '.ca' },
+						{ name: '.co.jp (Japan)', value: '.co.jp' },
+						{ name: '.co.uk (UK)', value: '.co.uk' },
+						{ name: '.com (US)', value: '.com' },
+						{ name: '.com.au (Australia)', value: '.com.au' },
+						{ name: '.com.br (Brazil)', value: '.com.br' },
+						{ name: '.com.mx (Mexico)', value: '.com.mx' },
+						{ name: '.com.tr (Turkey)', value: '.com.tr' },
+						{ name: '.de (Germany)', value: '.de' },
+						{ name: '.es (Spain)', value: '.es' },
+						{ name: '.fr (France)', value: '.fr' },
+						{ name: '.in (India)', value: '.in' },
+						{ name: '.it (Italy)', value: '.it' },
+						{ name: '.nl (Netherlands)', value: '.nl' },
+						{ name: '.pl (Poland)', value: '.pl' },
+						{ name: '.sa (Saudi Arabia)', value: '.sa' },
+						{ name: '.se (Sweden)', value: '.se' },
+						{ name: '.sg (Singapore)', value: '.sg' },
+					],
+					displayOptions: {
+						hide: {
+							operation: ['ACCOUNT_INFO', 'BULK_SUBMIT', 'BULK_GET_RESULT'],
+						},
 					},
 				},
-			},
 
 			// ─── ASIN / URL (Detail, Offer, Sales_Analysis_History, BEST_SELLERS_RANK, PACKAGE_DIMENSION) ──
 			{
