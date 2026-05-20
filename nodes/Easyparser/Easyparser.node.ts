@@ -593,7 +593,7 @@ export class Easyparser implements INodeType {
 				if (operation === 'Account_Info') {
 					const response = await this.helpers.httpRequest({
 						method: 'GET',
-						url: 'https://realtime.easyparser.com/v1/account',
+						url: 'https://account.easyparser.com/v1/account',
 						qs: {
 							api_key: apiKey,
 						},
