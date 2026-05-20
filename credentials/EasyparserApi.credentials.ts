@@ -32,7 +32,7 @@ export class EasyparserApi implements ICredentialType {
 
 	test: ICredentialTestRequest = {
 		request: {
-			baseURL: 'https://realtime.easyparser.com',
+			baseURL: 'https://account.easyparser.com',
 			url: '/v1/account',
 			qs: {},
 		},
