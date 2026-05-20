@@ -1,9 +1,13 @@
 # n8n-nodes-easyparser
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://easyparser.com/assets/svg/logos/logo-white-2.svg">
-  <img alt="Easyparser" src="https://easyparser.com/assets/svg/logos/logo.svg" width="200">
-</picture>
+<div align="center">
+  <br>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://easyparser.com/assets/svg/logos/logo-white-2.svg">
+    <img alt="Easyparser" src="https://easyparser.com/assets/svg/logos/logo.svg" width="260">
+  </picture>
+  <br><br>
+</div>
 
 This is an n8n community node for [Easyparser](https://easyparser.com) — a powerful, real-time Amazon product data extraction API. Extract product details, offers, search results, seller data, and more across 19+ marketplaces — no scraping, no proxies. Use our n8n node to build powerful e-commerce automations in minutes.
 
@@ -11,39 +15,26 @@ This is an n8n community node for [Easyparser](https://easyparser.com) — a pow
 
 With this node you can extract structured data from Amazon across 19+ marketplaces. Operations are organized into four categories:
 
-### 1. Product Data (Real-Time)
-| Operation | Action | Description |
-|---|---|---|
-| **Product Detail** | Get product detail | Full product info: title, price, images, reviews, variants |
-| **Product Offers** | Get product offers | All seller offers and pricing for a product |
-| **Sales Analysis History** | Get sales analysis history | Sales history and trend data |
-| **Best Sellers Rank** | Get best sellers rank | BSR data for a product |
-| **Package Dimension** | Get package dimension | Physical dimensions and weight |
-
-### 2. Search & Discovery (Real-Time)
-| Operation | Action | Description |
-|---|---|---|
-| **Search** | Search products | Search results by keyword or URL |
-| **Product Lookup** | Look up product by identifier | Convert EAN / UPC / GTIN / ISBN to Amazon ASIN |
-| **Category** | Get category | Category information by Node ID |
-
-### 3. Seller Data (Real-Time)
-| Operation | Action | Description |
-|---|---|---|
-| **Seller Profile** | Get seller profile | Seller info and ratings |
-| **Seller Products** | Get seller products | All products listed by a seller |
-| **Seller Feedback** | Get seller feedback | Feedback history for a seller |
-
-### 4. Bulk Integration
-| Operation | Action | Description |
-|---|---|---|
-| **Bulk Submit** | Submit bulk request | Submit a batch of requests for async processing via webhook |
-| **Bulk Get Result** | Get bulk result by ID | Retrieve parsed result of a bulk query using its ID |
-
-### Account
-| Operation | Action | Description |
-|---|---|---|
-| **Account Info** | Get account info | Account plan and credit usage details |
+| Group | Operation | Action | Description |
+|---|---|---|---|
+| **Product Data** | Product Detail | Get product detail | Full product info: title, price, images, reviews, variants |
+| | Product Offers | Get product offers | All seller offers and pricing for a product |
+| | Sales Analysis History | Get sales analysis history | Sales history and trend data |
+| | Best Sellers Rank | Get best sellers rank | BSR data for a product |
+| | Package Dimension | Get package dimension | Physical dimensions and weight |
+| **—** | | | |
+| **Search & Discovery** | Search | Search products | Search results by keyword or URL |
+| | Product Lookup | Look up product by identifier | Convert EAN / UPC / GTIN / ISBN to Amazon ASIN |
+| | Category | Get category | Category information by Node ID |
+| **—** | | | |
+| **Seller Data** | Seller Profile | Get seller profile | Seller info and ratings |
+| | Seller Products | Get seller products | All products listed by a seller |
+| | Seller Feedback | Get seller feedback | Feedback history for a seller |
+| **—** | | | |
+| **Bulk** | Bulk Submit | Submit bulk request | Submit a batch of requests for async processing via webhook |
+| | Bulk Get Result | Get bulk result by ID | Retrieve parsed result of a bulk query using its ID |
+| **—** | | | |
+| **Account** | Account Info | Get account info | Account plan and credit usage details |
 
 ## Bulk Integration
 
