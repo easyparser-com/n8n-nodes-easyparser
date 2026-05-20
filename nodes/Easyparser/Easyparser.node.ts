@@ -168,7 +168,7 @@ value: 'SELLER_PROFILE',
 				default: '',
 				required: true,
 				placeholder: 'B0F25371FH',
-				description: 'Amazon Standard Identification Number (ASIN) or full product URL',
+				description: 'Amazon ASIN (10-character alphanumeric code, e.g. B0F25371FH) or full product URL (e.g. https://amazon.com/dp/B0F25371FH)',
 				displayOptions: {
 					show: {
 						operation: [
@@ -749,12 +749,24 @@ value: 'SELLER_PROFILE',
 
 				// Operation-specific required parameters
 				if (['DETAIL', 'OFFER', 'SALES_ANALYSIS_HISTORY', 'BEST_SELLERS_RANK', 'PACKAGE_DIMENSION'].includes(operation)) {
-					const asinOrUrl = this.getNodeParameter('asin', i) as string;
+					let asinOrUrl = this.getNodeParameter('asin', i) as string;
 					if (!asinOrUrl) throw new NodeOperationError(this.getNode(), 'ASIN or URL is required', { itemIndex: i });
+					// Extract ASIN from URL if a URL is provided
+					const asinMatch = asinOrUrl.match(/\/dp\/([A-Z0-9]{10})/i) || asinOrUrl.match(/\/product\/([A-Z0-9]{10})/i);
+					if (asinMatch) {
+						asinOrUrl = asinMatch[1].toUpperCase();
+					}
 					if (asinOrUrl.startsWith('http')) {
 						qs.url = asinOrUrl;
+					} else if (asinOrUrl.match(/^[A-Z0-9]{10}$/i)) {
+						qs.asin = asinOrUrl.toUpperCase();
 					} else {
-						qs.asin = asinOrUrl;
+						// Try to treat as URL if it contains amazon
+						if (asinOrUrl.includes('amazon')) {
+							qs.url = asinOrUrl.startsWith('http') ? asinOrUrl : `https://${asinOrUrl}`;
+						} else {
+							qs.asin = asinOrUrl;
+						}
 					}
 				} else if (operation === 'SEARCH') {
 					const keywordOrUrl = this.getNodeParameter('keyword', i) as string;
