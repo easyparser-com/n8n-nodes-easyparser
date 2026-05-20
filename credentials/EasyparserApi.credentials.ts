@@ -17,7 +17,7 @@ export class EasyparserApi implements ICredentialType {
 			typeOptions: { password: true },
 			default: '',
 			required: true,
-			description: 'Your Easyparser API key. Get it from https://app.easyparser.com',
+			description: 'Your Easyparser API key. Get it from https://app.easyparser.com.',
 		},
 	];
 
