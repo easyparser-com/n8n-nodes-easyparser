@@ -386,7 +386,7 @@ export class Easyparser implements INodeType {
 				default: '',
 				required: true,
 				placeholder: 'qwe78933-7614-40b3-9a40-def192b74810',
-						description: 'The unique query ID returned from a Bulk Submit response (results[].id). Use the ID field from the bulk submit response.',
+					description: 'The unique query ID returned from a Bulk Submit response (results[].ID). Use the ID field from the bulk submit response.',
 				displayOptions: {
 					show: {
 						operation: ['Bulk_Get_Result'],
@@ -653,8 +653,6 @@ export class Easyparser implements INodeType {
 		const items = this.getInputData();
 		const returnData: INodeExecutionData[] = [];
 
-		const credentials = await this.getCredentials('easyparserApi');
-		const apiKey = credentials.apiKey as string;
 
 		for (let i = 0; i < items.length; i++) {
 			try {
@@ -662,10 +660,10 @@ export class Easyparser implements INodeType {
 
 				// ── Account Info ──────────────────────────────────────────────
 				if (operation === 'Account_Info') {
-					const response = await this.helpers.httpRequest({
+					const response = await this.helpers.httpRequestWithAuthentication.call(this, 'easyparserApi', {
 						method: 'GET',
 						url: 'https://account.easyparser.com/v1/account',
-						qs: { api_key: apiKey },
+						qs: {},
 						json: true,
 					});
 					returnData.push({ json: response, pairedItem: { item: i } });
@@ -705,11 +703,11 @@ export class Easyparser implements INodeType {
 						bulkBody.address_id = bulkAdditionalOptions.address_id;
 					}
 
-					const response = await this.helpers.httpRequest({
+					const response = await this.helpers.httpRequestWithAuthentication.call(this, 'easyparserApi', {
 						method: 'POST',
 						url: 'https://bulk.easyparser.com/v1/bulk',
 						headers: {
-							'api-key': apiKey,
+							
 							'Content-Type': 'application/json',
 						},
 						body: [bulkBody],
@@ -724,11 +722,11 @@ export class Easyparser implements INodeType {
 					const queryId = this.getNodeParameter('queryId', i) as string;
 					if (!queryId) throw new NodeOperationError(this.getNode(), 'Query ID is required', { itemIndex: i });
 
-					const response = await this.helpers.httpRequest({
+					const response = await this.helpers.httpRequestWithAuthentication.call(this, 'easyparserApi', {
 						method: 'GET',
 						url: `https://data.easyparser.com/v1/queries/${queryId}/results`,
 						headers: {
-							'api-key': apiKey,
+							
 						},
 						qs: { format: 'json' },
 						json: true,
@@ -763,7 +761,7 @@ export class Easyparser implements INodeType {
 				};
 
 				const qs: Record<string, string | number | boolean> = {
-					api_key: apiKey,
+					
 					platform: 'AMZ',
 					domain,
 					operation,
@@ -828,7 +826,7 @@ export class Easyparser implements INodeType {
 				if (additionalOptions.sortBy && additionalOptions.sortBy !== 'featured') qs.sort_by = additionalOptions.sortBy;
 				if (additionalOptions.sortBySeller && additionalOptions.sortBySeller !== 'featured-rank') qs.sort_by = additionalOptions.sortBySeller;
 
-				const response = await this.helpers.httpRequest({
+				const response = await this.helpers.httpRequestWithAuthentication.call(this, 'easyparserApi', {
 					method: 'GET',
 					url: 'https://realtime.easyparser.com/v1/request',
 					qs,
