@@ -1,6 +1,9 @@
 # n8n-nodes-easyparser
 
-![Easyparser](https://easyparser.com/assets/svg/logos/favicon.svg)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://easyparser.com/assets/svg/logos/logo-white-2.svg">
+  <img alt="Easyparser" src="https://easyparser.com/assets/svg/logos/logo.svg" width="200">
+</picture>
 
 This is an n8n community node for [Easyparser](https://easyparser.com) — a powerful, real-time Amazon product data extraction API. Extract product details, offers, search results, seller data, and more across 19+ marketplaces — no scraping, no proxies. Use our n8n node to build powerful e-commerce automations in minutes.
 
