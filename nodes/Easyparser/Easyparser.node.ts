@@ -45,7 +45,7 @@ export class Easyparser implements INodeType {
 				options: [
 					{
 						name: 'Account Info',
-						value: 'Account_Info',
+						value: 'ACCOUNT_INFO',
 						description: 'Get account plan and credit usage details',
 						action: 'Get account info',
 					},
@@ -57,13 +57,13 @@ export class Easyparser implements INodeType {
 					},
 					{
 						name: 'Bulk Get Result',
-						value: 'Bulk_Get_Result',
+						value: 'BULK_GET_RESULT',
 						description: 'Retrieve the result of a bulk query by its ID',
 						action: 'Get bulk result by ID',
 					},
 					{
 						name: 'Bulk Submit',
-						value: 'Bulk_Submit',
+						value: 'BULK_SUBMIT',
 						description: 'Submit a batch of requests to the Bulk API for async processing',
 						action: 'Submit bulk request',
 					},
@@ -75,54 +75,54 @@ export class Easyparser implements INodeType {
 					},
 					{
 						name: 'Product Detail',
-						value: 'Detail',
-						description: 'Get detailed information about a product',
+value: 'DETAIL',
+							description: 'Get detailed information about a product',
 						action: 'Get product detail',
 					},
 					{
 						name: 'Product Lookup',
-						value: 'Product_Lookup',
-						description: 'Convert EAN / UPC / GTIN to Amazon ASIN',
+value: 'PRODUCT_LOOKUP',
+							description: 'Convert EAN / UPC / GTIN to Amazon ASIN',
 						action: 'Look up product by identifier',
 					},
 					{
 						name: 'Product Offers',
-						value: 'Offer',
-						description: 'Get price offers for a product',
+value: 'OFFER',
+							description: 'Get price offers for a product',
 						action: 'Get product offers',
 					},
 					{
 						name: 'Sales Analysis History',
-						value: 'Sales_Analysis_History',
-						description: 'Get sales history and trend data',
+value: 'SALES_ANALYSIS_HISTORY',
+							description: 'Get sales history and trend data',
 						action: 'Get sales analysis history',
 					},
 					{
-						name: 'Search',
-						value: 'Search',
-						description: 'Search for products by keyword or URL',
+						name: 'SEARCH',
+value: 'SEARCH',
+							description: 'Search for products by keyword or URL',
 						action: 'Search products',
 					},
 					{
 						name: 'Seller Feedback',
-						value: 'Seller_Feedback',
-						description: 'Get feedback history for a seller',
+value: 'SELLER_FEEDBACK',
+							description: 'Get feedback history for a seller',
 						action: 'Get seller feedback',
 					},
 					{
 						name: 'Seller Products',
-						value: 'Seller_Products',
-						description: 'Get all products listed by a seller',
+value: 'SELLER_PRODUCTS',
+							description: 'Get all products listed by a seller',
 						action: 'Get seller products',
 					},
 					{
 						name: 'Seller Profile',
-						value: 'Seller_Profile',
-						description: 'Get seller information and ratings',
+value: 'SELLER_PROFILE',
+							description: 'Get seller information and ratings',
 						action: 'Get seller profile',
 					},
 				],
-				default: 'Detail',
+				default: 'DETAIL',
 			},
 
 			// ─── Amazon Domain (Real-Time operations) ────────────────────────────────────────────
@@ -135,7 +135,7 @@ export class Easyparser implements INodeType {
 				description: 'The Amazon marketplace domain to query (e.g. .com, .co.uk, .de, .fr, .it, .es, .ca, .co.jp, .com.au, .in, .ae, .sa, .nl, .pl, .se, .com.tr, .sg, .com.mx, .com.br)',
 				displayOptions: {
 					hide: {
-						operation: ['Account_Info', 'Bulk_Submit', 'Bulk_Get_Result'],
+						operation: ['ACCOUNT_INFO', 'BULK_SUBMIT', 'BULK_GET_RESULT'],
 					},
 				},
 			},
@@ -152,9 +152,9 @@ export class Easyparser implements INodeType {
 				displayOptions: {
 					show: {
 						operation: [
-							'Detail',
-							'Offer',
-							'Sales_Analysis_History',
+							'DETAIL',
+							'OFFER',
+							'SALES_ANALYSIS_HISTORY',
 							'BEST_SELLERS_RANK',
 							'PACKAGE_DIMENSION',
 						],
@@ -173,7 +173,7 @@ export class Easyparser implements INodeType {
 				description: 'Keyword or Amazon search URL to search for products',
 				displayOptions: {
 					show: {
-						operation: ['Search'],
+						operation: ['SEARCH'],
 					},
 				},
 			},
@@ -196,7 +196,7 @@ export class Easyparser implements INodeType {
 				required: true,
 				displayOptions: {
 					show: {
-						operation: ['Product_Lookup'],
+						operation: ['PRODUCT_LOOKUP'],
 					},
 				},
 			},
@@ -210,7 +210,7 @@ export class Easyparser implements INodeType {
 				description: 'EAN, UPC, GTIN, ISBN, JAN, MINSAN or ASIN to look up',
 				displayOptions: {
 					show: {
-						operation: ['Product_Lookup'],
+						operation: ['PRODUCT_LOOKUP'],
 					},
 				},
 			},
@@ -226,7 +226,7 @@ export class Easyparser implements INodeType {
 				description: 'Amazon Seller ID or full storefront URL',
 				displayOptions: {
 					show: {
-						operation: ['Seller_Profile', 'Seller_Products', 'Seller_Feedback'],
+						operation: ['SELLER_PROFILE', 'SELLER_PRODUCTS', 'SELLER_FEEDBACK'],
 					},
 				},
 			},
@@ -251,7 +251,7 @@ export class Easyparser implements INodeType {
 				required: true,
 				displayOptions: {
 					show: {
-						operation: ['Bulk_Submit'],
+						operation: ['BULK_SUBMIT'],
 					},
 				},
 			},
@@ -285,7 +285,7 @@ export class Easyparser implements INodeType {
 				description: 'The Amazon marketplace to query',
 				displayOptions: {
 					show: {
-						operation: ['Bulk_Submit'],
+						operation: ['BULK_SUBMIT'],
 					},
 				},
 			},
@@ -299,7 +299,7 @@ export class Easyparser implements INodeType {
 				description: 'Your server endpoint that will receive the results when processing is complete',
 				displayOptions: {
 					show: {
-						operation: ['Bulk_Submit'],
+						operation: ['BULK_SUBMIT'],
 					},
 				},
 			},
@@ -312,7 +312,7 @@ export class Easyparser implements INodeType {
 				description: 'The payload object for the bulk operation. Keys are pluralized (e.g. "asins", "keywords", "URLs"). Example for DETAIL: {"asins": ["B00004RFMB", "B00004RFMC"]}',
 				displayOptions: {
 					show: {
-						operation: ['Bulk_Submit'],
+						operation: ['BULK_SUBMIT'],
 					},
 				},
 			},
@@ -324,7 +324,7 @@ export class Easyparser implements INodeType {
 				default: {},
 				displayOptions: {
 					show: {
-						operation: ['Bulk_Submit'],
+						operation: ['BULK_SUBMIT'],
 					},
 				},
 				options: [
@@ -349,7 +349,7 @@ export class Easyparser implements INodeType {
 					description: 'The unique query ID returned from a Bulk Submit response (results[].ID). Use the ID field from the bulk submit response.',
 				displayOptions: {
 					show: {
-						operation: ['Bulk_Get_Result'],
+						operation: ['BULK_GET_RESULT'],
 					},
 				},
 			},
@@ -363,7 +363,7 @@ export class Easyparser implements INodeType {
 				default: {},
 				displayOptions: {
 					hide: {
-						operation: ['Account_Info', 'Bulk_Submit', 'Bulk_Get_Result'],
+						operation: ['ACCOUNT_INFO', 'BULK_SUBMIT', 'BULK_GET_RESULT'],
 					},
 				},
 				options: [
@@ -375,7 +375,7 @@ export class Easyparser implements INodeType {
 						description: 'Whether to extract A+ content (costs extra credits)',
 						displayOptions: {
 							show: {
-								'/operation': ['Detail'],
+								'/operation': ['DETAIL'],
 							},
 						},
 					},
@@ -394,7 +394,7 @@ export class Easyparser implements INodeType {
 						description: 'Amazon Associate/Affiliate ID to include in links',
 						displayOptions: {
 							show: {
-								'/operation': ['Detail', 'Offer', 'Search', 'Seller_Profile', 'Seller_Products'],
+								'/operation': ['DETAIL', 'OFFER', 'SEARCH', 'SELLER_PROFILE', 'SELLER_PRODUCTS'],
 							},
 						},
 					},
@@ -421,7 +421,7 @@ export class Easyparser implements INodeType {
 						description: 'Whether to exclude refinements from search results',
 						displayOptions: {
 							show: {
-								'/operation': ['Search', 'Seller_Products'],
+								'/operation': ['SEARCH', 'SELLER_PRODUCTS'],
 							},
 						},
 					},
@@ -433,7 +433,7 @@ export class Easyparser implements INodeType {
 						description: 'Whether to exclude sponsored products from results',
 						displayOptions: {
 							show: {
-								'/operation': ['Search'],
+								'/operation': ['SEARCH'],
 							},
 						},
 					},
@@ -446,7 +446,7 @@ export class Easyparser implements INodeType {
 						description: 'Duration for analysis in months (e.g., "3")',
 						displayOptions: {
 							show: {
-								'/operation': ['Sales_Analysis_History'],
+								'/operation': ['SALES_ANALYSIS_HISTORY'],
 							},
 						},
 					},
@@ -467,7 +467,7 @@ export class Easyparser implements INodeType {
 						description: 'Maximum page number for paginated results',
 						displayOptions: {
 							show: {
-								'/operation': ['Search', 'Offer', 'Seller_Products', 'Seller_Feedback'],
+								'/operation': ['SEARCH', 'OFFER', 'SELLER_PRODUCTS', 'SELLER_FEEDBACK'],
 							},
 						},
 					},
@@ -480,7 +480,7 @@ export class Easyparser implements INodeType {
 						description: 'Maximum seller rating filter',
 						displayOptions: {
 							show: {
-								'/operation': ['Seller_Feedback'],
+								'/operation': ['SELLER_FEEDBACK'],
 							},
 						},
 					},
@@ -493,7 +493,7 @@ export class Easyparser implements INodeType {
 						description: 'Minimum page number for paginated results',
 						displayOptions: {
 							show: {
-								'/operation': ['Search', 'Offer', 'Seller_Products', 'Seller_Feedback'],
+								'/operation': ['SEARCH', 'OFFER', 'SELLER_PRODUCTS', 'SELLER_FEEDBACK'],
 							},
 						},
 					},
@@ -506,7 +506,7 @@ export class Easyparser implements INodeType {
 						description: 'Minimum quantity available filter for offers',
 						displayOptions: {
 							show: {
-								'/operation': ['Offer'],
+								'/operation': ['OFFER'],
 							},
 						},
 					},
@@ -519,7 +519,7 @@ export class Easyparser implements INodeType {
 						description: 'Minimum seller rating filter',
 						displayOptions: {
 							show: {
-								'/operation': ['Seller_Feedback'],
+								'/operation': ['SELLER_FEEDBACK'],
 							},
 						},
 					},
@@ -532,7 +532,7 @@ export class Easyparser implements INodeType {
 						description: 'Comma-separated offer filters. Logistics: prime, free_shipping. Condition: condition_new, condition_used_like_new, condition_used_very_good, condition_used_good, condition_used_acceptable.',
 						displayOptions: {
 							show: {
-								'/operation': ['Offer'],
+								'/operation': ['OFFER'],
 							},
 						},
 					},
@@ -545,7 +545,7 @@ export class Easyparser implements INodeType {
 						description: 'Specific result page to extract',
 						displayOptions: {
 							show: {
-								'/operation': ['Search', 'Seller_Products'],
+								'/operation': ['SEARCH', 'SELLER_PRODUCTS'],
 							},
 						},
 					},
@@ -564,7 +564,7 @@ export class Easyparser implements INodeType {
 						description: 'Custom refinements string',
 						displayOptions: {
 							show: {
-								'/operation': ['Search', 'Seller_Products'],
+								'/operation': ['SEARCH', 'SELLER_PRODUCTS'],
 							},
 						},
 					},
@@ -584,7 +584,7 @@ export class Easyparser implements INodeType {
 						description: 'Sort order for search results',
 						displayOptions: {
 							show: {
-								'/operation': ['Search'],
+								'/operation': ['SEARCH'],
 							},
 						},
 					},
@@ -600,7 +600,7 @@ export class Easyparser implements INodeType {
 						description: 'Sort order for seller product listings',
 						displayOptions: {
 							show: {
-								'/operation': ['Seller_Products'],
+								'/operation': ['SELLER_PRODUCTS'],
 							},
 						},
 					},
@@ -619,7 +619,7 @@ export class Easyparser implements INodeType {
 				const operation = this.getNodeParameter('operation', i) as string;
 
 				// ── Account Info ──────────────────────────────────────────────
-				if (operation === 'Account_Info') {
+				if (operation === 'ACCOUNT_INFO') {
 					const response = await this.helpers.httpRequestWithAuthentication.call(this, 'easyparserApi', {
 						method: 'GET',
 						url: 'https://account.easyparser.com/v1/account',
@@ -631,7 +631,7 @@ export class Easyparser implements INodeType {
 				}
 
 				// ── Bulk Submit ───────────────────────────────────────────────
-				if (operation === 'Bulk_Submit') {
+				if (operation === 'BULK_SUBMIT') {
 					const bulkOperation = this.getNodeParameter('bulkOperation', i) as string;
 					const bulkDomain = this.getNodeParameter('bulkDomain', i) as string;
 					const callbackUrl = this.getNodeParameter('callbackUrl', i) as string;
@@ -678,7 +678,7 @@ export class Easyparser implements INodeType {
 				}
 
 				// ── Bulk Get Result ───────────────────────────────────────────
-				if (operation === 'Bulk_Get_Result') {
+				if (operation === 'BULK_GET_RESULT') {
 					const queryId = this.getNodeParameter('queryId', i) as string;
 					if (!queryId) throw new NodeOperationError(this.getNode(), 'Query ID is required', { itemIndex: i });
 
@@ -728,7 +728,7 @@ export class Easyparser implements INodeType {
 				};
 
 				// Operation-specific required parameters
-				if (['Detail', 'Offer', 'Sales_Analysis_History', 'BEST_SELLERS_RANK', 'PACKAGE_DIMENSION'].includes(operation)) {
+				if (['DETAIL', 'OFFER', 'SALES_ANALYSIS_HISTORY', 'BEST_SELLERS_RANK', 'PACKAGE_DIMENSION'].includes(operation)) {
 					const asinOrUrl = this.getNodeParameter('asin', i) as string;
 					if (!asinOrUrl) throw new NodeOperationError(this.getNode(), 'ASIN or URL is required', { itemIndex: i });
 					if (asinOrUrl.startsWith('http')) {
@@ -736,7 +736,7 @@ export class Easyparser implements INodeType {
 					} else {
 						qs.asin = asinOrUrl;
 					}
-				} else if (operation === 'Search') {
+				} else if (operation === 'SEARCH') {
 					const keywordOrUrl = this.getNodeParameter('keyword', i) as string;
 					if (!keywordOrUrl) throw new NodeOperationError(this.getNode(), 'Search keyword or URL is required', { itemIndex: i });
 					if (keywordOrUrl.startsWith('http')) {
@@ -744,13 +744,13 @@ export class Easyparser implements INodeType {
 					} else {
 						qs.keyword = keywordOrUrl;
 					}
-				} else if (operation === 'Product_Lookup') {
+				} else if (operation === 'PRODUCT_LOOKUP') {
 					const identifierType = this.getNodeParameter('identifier_type', i) as string;
 					const identifier = this.getNodeParameter('identifier', i) as string;
 					if (!identifier) throw new NodeOperationError(this.getNode(), 'Product identifier is required', { itemIndex: i });
 					qs.identifier_type = identifierType;
 					qs.identifier = identifier;
-				} else if (['Seller_Profile', 'Seller_Products', 'Seller_Feedback'].includes(operation)) {
+				} else if (['SELLER_PROFILE', 'SELLER_PRODUCTS', 'SELLER_FEEDBACK'].includes(operation)) {
 					const sellerIdOrUrl = this.getNodeParameter('sellerId', i) as string;
 					if (!sellerIdOrUrl) throw new NodeOperationError(this.getNode(), 'Seller ID or URL is required', { itemIndex: i });
 					if (sellerIdOrUrl.startsWith('http')) {
