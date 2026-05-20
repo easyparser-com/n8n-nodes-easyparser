@@ -1,4 +1,33 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60" fill="none">
-  <rect width="60" height="60" rx="12" fill="#FF6B35"/>
-  <text x="30" y="38" font-family="Arial, sans-serif" font-size="22" font-weight="bold" fill="white" text-anchor="middle">EP</text>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="katman_2" data-name="katman 2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 153.72 133.08">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: url(#Adsız_degrade_325);
+      }
+
+      .cls-2 {
+        fill: url(#Adsız_degrade_307);
+      }
+
+      .cls-3 {
+        fill: #39a7ff;
+      }
+    </style>
+    <linearGradient id="Adsız_degrade_307" data-name="Adsız degrade 307" x1="-120.41" y1="250.4" x2="-166.06" y2="223.48" gradientTransform="translate(-45.45 289.84) rotate(-180)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#39a7ff"/>
+      <stop offset="1" stop-color="#005a96"/>
+    </linearGradient>
+    <linearGradient id="Adsız_degrade_325" data-name="Adsız degrade 325" x1="-2286.24" y1="536.28" x2="-2331.89" y2="509.36" gradientTransform="translate(2365 -442.63)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#39a7ff"/>
+      <stop offset="1" stop-color="#005a96"/>
+    </linearGradient>
+  </defs>
+  <g id="katman_1" data-name="katman 1">
+    <path class="cls-2" d="M115.23,0c1.97,0,3.78,1.04,4.78,2.74l30.55,52.04c4.22,7.26,4.21,16.23-.04,23.47l-30.42,51.88s9.8-16.71,4.27-51.38c-2.27-14.22-23.28-50.06-34.26-68.07-2.85-4.68.51-10.67,5.99-10.67h19.12Z"/>
+    <path class="cls-3" d="M115.23,133.08c1.97,0,3.78-1.04,4.78-2.74l30.55-52.04c4.22-7.26,4.21-16.23-.04-23.47L120.1,2.96s9.8,16.71,4.27,51.38c-2.27,14.22-23.28,50.06-34.26,68.07-2.85,4.68.51,10.67,5.99,10.67h19.12Z"/>
+    <path class="cls-1" d="M38.49,133.08c-1.97,0-3.78-1.04-4.78-2.74L3.16,78.31c-4.22-7.26-4.21-16.23.04-23.47L33.62,2.96s-9.8,16.71-4.27,51.38c2.27,14.22,23.28,50.06,34.26,68.07,2.85,4.68-.51,10.67-5.99,10.67h-19.12Z"/>
+    <path class="cls-3" d="M38.49,0c-1.97,0-3.78,1.04-4.78,2.74L3.16,54.78c-4.22,7.26-4.21,16.23.04,23.47l30.42,51.88s-9.8-16.71-4.27-51.38c2.27-14.22,23.28-50.06,34.26-68.07C66.46,5.99,63.1,0,57.62,0h-19.12Z"/>
+    <circle class="cls-3" cx="74.76" cy="65.06" r="14.31"/>
+  </g>
 </svg>
