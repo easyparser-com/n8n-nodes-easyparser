@@ -16,6 +16,7 @@ export class Easyparser implements INodeType {
 		version: 1,
 		subtitle: '={{$parameter["operation"]}}',
 		description: 'Extract structured Amazon product data using Easyparser API',
+		usableAsTool: true,
 		defaults: {
 			name: 'Easyparser',
 		},
