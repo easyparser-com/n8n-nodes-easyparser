@@ -129,30 +129,11 @@ value: 'SELLER_PROFILE',
 			{
 					displayName: 'Amazon Domain',
 					name: 'domain',
-					type: 'options',
+					type: 'string',
 					default: '.com',
-					description: 'The Amazon marketplace domain extension to query',
-					options: [
-						{ name: '.ae (UAE)', value: '.ae' },
-						{ name: '.ca (Canada)', value: '.ca' },
-						{ name: '.co.jp (Japan)', value: '.co.jp' },
-						{ name: '.co.uk (UK)', value: '.co.uk' },
-						{ name: '.com (US)', value: '.com' },
-						{ name: '.com.au (Australia)', value: '.com.au' },
-						{ name: '.com.br (Brazil)', value: '.com.br' },
-						{ name: '.com.mx (Mexico)', value: '.com.mx' },
-						{ name: '.com.tr (Turkey)', value: '.com.tr' },
-						{ name: '.de (Germany)', value: '.de' },
-						{ name: '.es (Spain)', value: '.es' },
-						{ name: '.fr (France)', value: '.fr' },
-						{ name: '.in (India)', value: '.in' },
-						{ name: '.it (Italy)', value: '.it' },
-						{ name: '.nl (Netherlands)', value: '.nl' },
-						{ name: '.pl (Poland)', value: '.pl' },
-						{ name: '.sa (Saudi Arabia)', value: '.sa' },
-						{ name: '.se (Sweden)', value: '.se' },
-						{ name: '.sg (Singapore)', value: '.sg' },
-					],
+					required: true,
+					placeholder: '.com',
+					description: 'Amazon marketplace domain extension. MUST be one of: .com, .ca, .co.uk, .de, .fr, .it, .es, .co.jp, .com.au, .in, .ae, .sa, .nl, .pl, .se, .com.tr, .sg, .com.mx, .com.br. Always starts with a dot. For example use .ca for Canada, .de for Germany, .co.uk for UK.',
 					displayOptions: {
 						hide: {
 							operation: ['ACCOUNT_INFO', 'BULK_SUBMIT', 'BULK_GET_RESULT'],
@@ -168,7 +149,7 @@ value: 'SELLER_PROFILE',
 				default: '',
 				required: true,
 				placeholder: 'B0F25371FH',
-				description: 'Amazon ASIN (10-character alphanumeric code, e.g. B0F25371FH) or full product URL (e.g. https://amazon.com/dp/B0F25371FH)',
+				description: 'Amazon ASIN (10-character alphanumeric code, e.g. B0F25371FH) or full product URL (e.g. https://amazon.com/dp/B0F25371FH).',
 				displayOptions: {
 					show: {
 						operation: [
@@ -716,7 +697,14 @@ value: 'SELLER_PROFILE',
 				}
 
 				// ── Real-Time Operations ──────────────────────────────────────
-				const domain = this.getNodeParameter('domain', i) as string;
+					let domainRaw = this.getNodeParameter('domain', i) as string;
+					// Normalize domain: strip 'amazon' prefix and ensure it starts with a dot
+					let domain = domainRaw.trim().toLowerCase();
+					domain = domain.replace(/^https?:\/\//i, '').replace(/^(www\.)?amazon/i, '').replace(/\/.*/g, '');
+					if (!domain.startsWith('.')) domain = `.${domain}`;
+					// Validate domain
+					const validDomains = ['.com', '.ca', '.co.uk', '.de', '.fr', '.it', '.es', '.co.jp', '.com.au', '.in', '.ae', '.sa', '.nl', '.pl', '.se', '.com.tr', '.sg', '.com.mx', '.com.br'];
+					if (!validDomains.includes(domain)) domain = '.com';
 				const additionalOptions = this.getNodeParameter('additionalOptions', i) as {
 					a_plus_content?: boolean;
 					addressId?: string;
