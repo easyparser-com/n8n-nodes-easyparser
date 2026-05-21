@@ -3,9 +3,10 @@ import {
 	INodeExecutionData,
 	INodeType,
 	INodeTypeDescription,
-	NodeConnectionTypes,
+	NodeApiError,
 	NodeOperationError,
 } from 'n8n-workflow';
+import type { JsonObject } from 'n8n-workflow';
 
 export class Easyparser implements INodeType {
 	description: INodeTypeDescription = {
@@ -28,13 +29,7 @@ export class Easyparser implements INodeType {
 				required: true,
 			},
 		],
-		requestDefaults: {
-			baseURL: 'https://realtime.easyparser.com',
-			headers: {
-				Accept: 'application/json',
-				'Content-Type': 'application/json',
-			},
-		},
+
 		properties: [
 			// ─── Operation ────────────────────────────────────────────────
 			{
@@ -98,7 +93,7 @@ value: 'SALES_ANALYSIS_HISTORY',
 						action: 'Get sales analysis history',
 					},
 					{
-						name: 'SEARCH',
+						name: 'Search',
 value: 'SEARCH',
 							description: 'Search for products by keyword or URL',
 						action: 'Search products',
@@ -238,15 +233,15 @@ value: 'SELLER_PROFILE',
 				name: 'bulkOperation',
 				type: 'options',
 				options: [
-					{ name: 'BEST_SELLERS_RANK', value: 'BEST_SELLERS_RANK' },
-					{ name: 'DETAIL', value: 'DETAIL' },
-					{ name: 'OFFER', value: 'OFFER' },
-					{ name: 'PACKAGE_DIMENSION', value: 'PACKAGE_DIMENSION' },
-					{ name: 'PRODUCT_LOOKUP', value: 'PRODUCT_LOOKUP' },
-					{ name: 'SALES_ANALYSIS_HISTORY', value: 'SALES_ANALYSIS_HISTORY' },
-					{ name: 'SEARCH', value: 'SEARCH' },
-					{ name: 'SELLER_PRODUCTS', value: 'SELLER_PRODUCTS' },
-					{ name: 'SELLER_PROFILE', value: 'SELLER_PROFILE' },
+{ name: 'Best Sellers Rank', value: 'BEST_SELLERS_RANK' },
+						{ name: 'Detail', value: 'DETAIL' },
+						{ name: 'Offer', value: 'OFFER' },
+						{ name: 'Package Dimension', value: 'PACKAGE_DIMENSION' },
+						{ name: 'Product Lookup', value: 'PRODUCT_LOOKUP' },
+						{ name: 'Sales Analysis History', value: 'SALES_ANALYSIS_HISTORY' },
+						{ name: 'Search', value: 'SEARCH' },
+						{ name: 'Seller Products', value: 'SELLER_PRODUCTS' },
+						{ name: 'Seller Profile', value: 'SELLER_PROFILE' },
 				],
 				default: 'DETAIL',
 				required: true,
@@ -811,15 +806,15 @@ value: 'SELLER_PROFILE',
 
 				returnData.push({ json: response, pairedItem: { item: i } });
 			} catch (error) {
-				if (this.continueOnFail()) {
-					returnData.push({
-						json: { error: (error as Error).message },
-						pairedItem: { item: i },
-					});
-					continue;
+					if (this.continueOnFail()) {
+						returnData.push({
+							json: { error: (error as Error).message },
+							pairedItem: { item: i },
+						});
+						continue;
+					}
+					throw new NodeApiError(this.getNode(), error as JsonObject);
 				}
-				throw error;
-			}
 		}
 
 		return [returnData];
