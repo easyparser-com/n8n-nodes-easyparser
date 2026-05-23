@@ -655,20 +655,21 @@ value: 'SELLER_PROFILE',
 						payload,
 					};
 
-					if (bulkAdditionalOptions.address_id) {
-						bulkBody.address_id = bulkAdditionalOptions.address_id;
-					}
+						if (bulkAdditionalOptions.address_id) {
+							bulkBody.address_id = bulkAdditionalOptions.address_id;
+						}
 
-					const response = await this.helpers.httpRequestWithAuthentication.call(this, 'easyparserApi', {
-						method: 'POST',
-						url: 'https://bulk.easyparser.com/v1/bulk',
-						headers: {
-							
-							'Content-Type': 'application/json',
-						},
-						body: [bulkBody],
-						json: true,
-					});
+						const credentials = await this.getCredentials('easyparserApi');
+						const response = await this.helpers.httpRequest({
+							method: 'POST',
+							url: 'https://bulk.easyparser.com/v1/bulk',
+							headers: {
+								'api-key': credentials.apiKey as string,
+								'Content-Type': 'application/json',
+							},
+							body: [bulkBody],
+							json: true,
+						});
 					returnData.push({ json: response, pairedItem: { item: i } });
 					continue;
 				}
@@ -678,15 +679,16 @@ value: 'SELLER_PROFILE',
 					const queryId = this.getNodeParameter('queryId', i) as string;
 					if (!queryId) throw new NodeOperationError(this.getNode(), 'Query ID is required', { itemIndex: i });
 
-					const response = await this.helpers.httpRequestWithAuthentication.call(this, 'easyparserApi', {
-						method: 'GET',
-						url: `https://data.easyparser.com/v1/queries/${queryId}/results`,
-						headers: {
-							
-						},
-						qs: { format: 'json' },
-						json: true,
-					});
+						const credentialsBulk = await this.getCredentials('easyparserApi');
+						const response = await this.helpers.httpRequest({
+							method: 'GET',
+							url: `https://data.easyparser.com/v1/queries/${queryId}/results`,
+							headers: {
+								'api-key': credentialsBulk.apiKey as string,
+							},
+							qs: { format: 'json' },
+							json: true,
+						});
 					returnData.push({ json: response, pairedItem: { item: i } });
 					continue;
 				}
