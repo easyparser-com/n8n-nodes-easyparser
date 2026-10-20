@@ -4,6 +4,16 @@ on:
   push:
     tags:
       - "v*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Exact package version to publish from main (e.g. 0.3.0)"
+        required: true
+        type: string
+
+concurrency:
+  group: npm-publish
+  cancel-in-progress: false
 
 jobs:
   publish:
@@ -19,14 +29,27 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "24"
           registry-url: "https://registry.npmjs.org"
-          cache: npm
 
-      - name: Verify tag matches package version
+      - name: Install npm with trusted publishing support
+        run: npm install --global npm@11.21.1 --ignore-scripts --no-audit --no-fund
+
+      - name: Verify release source and version
+        env:
+          REQUESTED_VERSION: ${{ inputs.version }}
         run: |
           VERSION=$(node -p "require('./package.json').version")
-          test "$GITHUB_REF_NAME" = "v$VERSION"
+          if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ]; then
+            test "$GITHUB_REF" = "refs/heads/main"
+            test "$REQUESTED_VERSION" = "$VERSION"
+          else
+            test "$GITHUB_REF_NAME" = "v$VERSION"
+          fi
+          if npm view "n8n-nodes-easyparser@$VERSION" version --json 2>/dev/null | grep -Fq "\"$VERSION\""; then
+            echo "Version $VERSION is already published; refusing duplicate publish."
+            exit 1
+          fi
 
       - name: Install locked dependencies
         run: npm ci --ignore-scripts --no-audit --no-fund
@@ -34,7 +57,5 @@ jobs:
       - name: Lint, build and offline regression tests
         run: npm run check
 
-      - name: Publish with provenance
+      - name: Publish with trusted publishing and provenance
         run: npm publish --access public --provenance
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
