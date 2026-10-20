@@ -3,7 +3,7 @@ name: Publish to npm
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
 
 jobs:
   publish:
@@ -19,14 +19,20 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          registry-url: 'https://registry.npmjs.org'
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+          cache: npm
 
-      - name: Install dev dependencies only
-        run: npm install --only=dev --ignore-scripts
+      - name: Verify tag matches package version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          test "$GITHUB_REF_NAME" = "v$VERSION"
 
-      - name: Build
-        run: npm run build
+      - name: Install locked dependencies
+        run: npm ci --ignore-scripts --no-audit --no-fund
+
+      - name: Lint, build and offline regression tests
+        run: npm run check
 
       - name: Publish with provenance
         run: npm publish --access public --provenance

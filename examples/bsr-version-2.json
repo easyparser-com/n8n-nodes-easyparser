@@ -1,0 +1,60 @@
+{
+  "name": "Easyparser - BSR version 2 migration (select your own credential)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "manual-trigger",
+      "name": "When clicking Execute workflow",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "operation": "BEST_SELLERS_RANK",
+        "domain": ".com",
+        "asin": "B09NHWJRFM",
+        "failOnApiError": true,
+        "additionalOptions": { "operationVersion": 2 }
+      },
+      "id": "bsr-v2",
+      "name": "Easyparser BSR Version 2",
+      "type": "n8n-nodes-easyparser.easyparser",
+      "typeVersion": 1,
+      "position": [260, 0]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "return items.map((item, index) => {\n  const product = item.json.result?.product ?? {};\n  return {\n    json: {\n      asin: product.asin ?? item.json.request_parameters?.asin ?? null,\n      title: product.title ?? null,\n      category_rank: product.bestseller?.category_rank ?? product.bestseller?.rank ?? null,\n      category_title: product.bestseller?.category_title ?? product.bestseller?.context_name ?? null,\n      image: product.image?.link ?? product.media?.image_url ?? null,\n      operation_version: item.json.request_parameters?.operation_version ?? null,\n    },\n    pairedItem: { item: index },\n  };\n});"
+      },
+      "id": "bsr-adapter",
+      "name": "Read rank and image across versions",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [520, 0]
+    }
+  ],
+  "connections": {
+    "When clicking Execute workflow": {
+      "main": [
+        [{ "node": "Easyparser BSR Version 2", "type": "main", "index": 0 }]
+      ]
+    },
+    "Easyparser BSR Version 2": {
+      "main": [
+        [
+          {
+            "node": "Read rank and image across versions",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "pinData": {},
+  "tags": []
+}
