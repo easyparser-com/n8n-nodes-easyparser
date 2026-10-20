@@ -1,0 +1,39 @@
+{
+  "name": "Easyparser - Similar products (select your own credential)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "manual-trigger",
+      "name": "When clicking Execute workflow",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "operation": "SIMILAR_PRODUCTS",
+        "domain": ".com",
+        "asin": "B09NHWJRFM",
+        "similarLimit": "10",
+        "failOnApiError": true,
+        "additionalOptions": {}
+      },
+      "id": "similar-products",
+      "name": "Easyparser Similar Products",
+      "type": "n8n-nodes-easyparser.easyparser",
+      "typeVersion": 1,
+      "position": [260, 0]
+    }
+  ],
+  "connections": {
+    "When clicking Execute workflow": {
+      "main": [
+        [{ "node": "Easyparser Similar Products", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "pinData": {},
+  "tags": []
+}

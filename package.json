@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-easyparser",
-  "version": "0.2.18",
+  "version": "0.3.0",
   "description": "Extract structured Amazon product data using Easyparser API. Get product details, offers, search results, and seller data across 19+ marketplaces.",
   "keywords": [
     "n8n-community-node-package",
@@ -20,17 +20,22 @@
     "type": "git",
     "url": "git+https://github.com/easyparser-com/n8n-nodes-easyparser.git"
   },
-  "main": "index.js",
+  "main": "dist/nodes/Easyparser/Easyparser.node.js",
   "scripts": {
     "build": "tsc && gulp build:icons",
     "dev": "tsc --watch",
     "format": "prettier nodes credentials --write",
-    "lint": "eslint nodes credentials package.json",
-    "lintfix": "eslint nodes credentials package.json --fix",
-    "prepublishOnly": "npm run build"
+    "lint": "eslint --ext .ts nodes credentials",
+    "lintfix": "eslint --ext .ts nodes credentials --fix",
+    "test": "npm run build && node --test tests/*.test.js",
+    "check": "npm run lint && npm test",
+    "prepublishOnly": "npm run check"
   },
   "files": [
-    "dist"
+    "dist",
+    "docs",
+    "examples",
+    "CHANGELOG.md"
   ],
   "n8n": {
     "n8nNodesApiVersion": 1,

@@ -1,0 +1,58 @@
+{
+  "name": "Easyparser - Bulk result status (replace ID and select credential)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "manual-trigger",
+      "name": "When clicking Execute workflow",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "operation": "BULK_GET_RESULT",
+        "queryId": "REPLACE_WITH_ACCEPTED_RESULT_ID",
+        "failOnApiError": false
+      },
+      "id": "bulk-result",
+      "name": "Retrieve raw Bulk status",
+      "type": "n8n-nodes-easyparser.easyparser",
+      "typeVersion": 1,
+      "position": [260, 0]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "return items.map((item, index) => {\n  const response = item.json;\n  const data = response.data ?? {};\n  const info = data.json_result?.request_info ?? {};\n  const failed = response.success === false || data.status === 'failure' || info.success === false;\n  const pending = !failed && data.status === 'pending';\n  return {\n    json: {\n      query_id: data.id ?? null,\n      status: failed ? 'failure' : pending ? 'pending' : data.status ?? 'unknown',\n      ready: !failed && !pending && data.status === 'success',\n      parsed_result: !failed && !pending ? data.json_result?.result ?? null : null,\n      error_details: failed ? info.error_details ?? response.error ?? response.message ?? [] : [],\n    },\n    pairedItem: { item: index },\n  };\n});"
+      },
+      "id": "status-reader",
+      "name": "Check ready before using parsed result",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [520, 0]
+    }
+  ],
+  "connections": {
+    "When clicking Execute workflow": {
+      "main": [
+        [{ "node": "Retrieve raw Bulk status", "type": "main", "index": 0 }]
+      ]
+    },
+    "Retrieve raw Bulk status": {
+      "main": [
+        [
+          {
+            "node": "Check ready before using parsed result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "pinData": {},
+  "tags": []
+}
