@@ -1048,18 +1048,19 @@ export class Easyparser implements INodeType {
             i,
           );
           if (version !== undefined) body.operation_version = version;
-          const credentials = await this.getCredentials("easyparserApi");
-          const response = await this.helpers.httpRequest({
-            method: "POST",
-            url: "https://bulk.easyparser.com/v1/bulk",
-            headers: {
-              "api-key": credentials.apiKey as string,
-              "Content-Type": "application/json",
-            },
-            body: [body],
-            json: true,
-            timeout: REQUEST_TIMEOUT,
-          });
+          const response =
+            await this.helpers.httpRequestWithAuthentication.call(
+              this,
+              "easyparserApi",
+              {
+                method: "POST",
+                url: "https://bulk.easyparser.com/v1/bulk",
+                headers: { "Content-Type": "application/json" },
+                body: [body],
+                json: true,
+                timeout: REQUEST_TIMEOUT,
+              },
+            );
           returnData.push({
             json: checked(response, operation, i, strict),
             pairedItem: { item: i },
@@ -1075,15 +1076,18 @@ export class Easyparser implements INodeType {
               "Query ID is required",
               { itemIndex: i },
             );
-          const credentials = await this.getCredentials("easyparserApi");
-          const response = await this.helpers.httpRequest({
-            method: "GET",
-            url: `https://data.easyparser.com/v1/queries/${encodeURIComponent(queryId)}/results`,
-            headers: { "api-key": credentials.apiKey as string },
-            qs: { format: "json" },
-            json: true,
-            timeout: REQUEST_TIMEOUT,
-          });
+          const response =
+            await this.helpers.httpRequestWithAuthentication.call(
+              this,
+              "easyparserApi",
+              {
+                method: "GET",
+                url: `https://data.easyparser.com/v1/queries/${encodeURIComponent(queryId)}/results`,
+                qs: { format: "json" },
+                json: true,
+                timeout: REQUEST_TIMEOUT,
+              },
+            );
           returnData.push({
             json: checked(response, operation, i, strict),
             pairedItem: { item: i },

@@ -25,8 +25,13 @@ export class EasyparserApi implements ICredentialType {
   authenticate: IAuthenticateGeneric = {
     type: "generic",
     properties: {
+      // Real-time/account require api_key; Bulk/data require api-key.
+      // n8n injects both through its credential-aware request helper.
       qs: {
         api_key: "={{$credentials.apiKey}}",
+      },
+      headers: {
+        "api-key": "={{$credentials.apiKey}}",
       },
     },
   };

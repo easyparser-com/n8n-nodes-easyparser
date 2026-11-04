@@ -1,8 +1,10 @@
 "use strict";
 
 const assert = require("node:assert/strict");
+const { readFileSync } = require("node:fs");
 const path = require("node:path");
 const test = require("node:test");
+const vm = require("node:vm");
 
 const { Easyparser } = require(
   path.join(
@@ -92,22 +94,61 @@ function resolveParameter(parameters, parameterPath, defaultValue) {
   return value === undefined ? defaultValue : value;
 }
 
+function assertNoManualAuthentication(request) {
+  const forbiddenNames = new Set([
+    "apikey",
+    "secret",
+    "credentials",
+    "authorization",
+    "authentication",
+    "auth",
+    "password",
+    "token",
+  ]);
+  const normalized = (name) => name.toLowerCase().replace(/[-_]/g, "");
+  const visit = (value, location) => {
+    if (value && typeof value === "object") {
+      for (const [name, entry] of Object.entries(value)) {
+        assert.ok(
+          !forbiddenNames.has(normalized(name)),
+          `Node must not inject authentication at ${location}.${name}`,
+        );
+        visit(entry, `${location}.${name}`);
+      }
+    } else if (typeof value === "string") {
+      assert.doesNotMatch(
+        value,
+        /\$credentials|\$env|test-api-key/,
+        `Node must not interpolate a secret at ${location}`,
+      );
+    }
+  };
+  visit(request, "request");
+  const url = new URL(request.url);
+  assert.equal(url.username, "", "Node must not place credentials in the URL");
+  assert.equal(url.password, "", "Node must not place credentials in the URL");
+  for (const name of url.searchParams.keys()) {
+    assert.ok(
+      !forbiddenNames.has(normalized(name)),
+      `Node must not inject authentication in the URL query: ${name}`,
+    );
+  }
+}
+
 function createExecution(parametersByItem, configuration = {}) {
   const calls = [];
+  const forbiddenCalls = { getCredentials: 0, httpRequest: 0 };
   const inputItems =
     configuration.inputItems || parametersByItem.map(() => ({ json: {} }));
   let authenticatedCallIndex = 0;
-  let plainCallIndex = 0;
 
-  async function responseFor(kind, request, credentialName) {
-    const call = { kind, request, credentialName };
+  async function responseFor(request, credentialName) {
+    const call = { kind: "authenticated", request, credentialName };
     calls.push(call);
-    const index =
-      kind === "authenticated" ? authenticatedCallIndex++ : plainCallIndex++;
-    const configured =
-      kind === "authenticated"
-        ? configuration.authResponse
-        : configuration.plainResponse;
+    assert.equal(credentialName, "easyparserApi");
+    assertNoManualAuthentication(request);
+    const index = authenticatedCallIndex++;
+    const configured = configuration.authResponse;
     const response = Array.isArray(configured) ? configured[index] : configured;
 
     if (response instanceof Error) throw response;
@@ -124,7 +165,12 @@ function createExecution(parametersByItem, configuration = {}) {
         parameterPath,
         defaultValue,
       ),
-    getCredentials: async () => ({ apiKey: "test-api-key" }),
+    getCredentials: async () => {
+      forbiddenCalls.getCredentials++;
+      throw new Error(
+        "Node must not access raw credentials via getCredentials",
+      );
+    },
     getNode: () => ({
       id: "easyparser-contract-test",
       name: "Easyparser",
@@ -136,14 +182,24 @@ function createExecution(parametersByItem, configuration = {}) {
     getNodeVersion: () => 1,
     continueOnFail: () => configuration.continueOnFail === true,
     helpers: {
-      httpRequestWithAuthentication: async (credentialName, request) =>
-        responseFor("authenticated", request, credentialName),
-      httpRequest: async (request) => responseFor("plain", request),
+      httpRequestWithAuthentication: async function (credentialName, request) {
+        assert.equal(
+          this,
+          context,
+          "Authenticated helper needs execution context",
+        );
+        return responseFor(request, credentialName);
+      },
+      httpRequest: async () => {
+        forbiddenCalls.httpRequest++;
+        throw new Error("Node must not use the unauthenticated HTTP helper");
+      },
     },
   };
 
   return {
     calls,
+    forbiddenCalls,
     execute: async () => new Easyparser().execute.call(context),
   };
 }
@@ -333,11 +389,157 @@ test("description exposes the agreed request controls with their defaults and op
   );
 });
 
-test("credentials authenticate through the API-key query property without exposing a secret", () => {
+test("credentials delegate query and header API keys to n8n generic authentication", () => {
   const credentials = new EasyparserApi();
   assert.deepEqual(credentials.authenticate, {
     type: "generic",
-    properties: { qs: { api_key: "={{$credentials.apiKey}}" } },
+    properties: {
+      qs: { api_key: "={{$credentials.apiKey}}" },
+      headers: { "api-key": "={{$credentials.apiKey}}" },
+    },
+  });
+});
+
+test("credential definition is declarative and initializes without environment or module access", () => {
+  const compiled = readFileSync(
+    path.join(
+      __dirname,
+      "..",
+      "dist",
+      "credentials",
+      "EasyparserApi.credentials.js",
+    ),
+    "utf8",
+  );
+  const source = readFileSync(
+    path.join(__dirname, "..", "credentials", "EasyparserApi.credentials.ts"),
+    "utf8",
+  );
+  assert.match(source, /authenticate:\s*IAuthenticateGeneric\s*=/);
+  const sandbox = { exports: {} };
+  const accessed = [];
+  for (const name of ["process", "$env", "require", "fetch"]) {
+    Object.defineProperty(sandbox, name, {
+      get() {
+        accessed.push(name);
+        throw new Error(`Credential definition must not access ${name}`);
+      },
+    });
+  }
+  const isolated = vm.runInNewContext(
+    `${compiled}\nnew exports.EasyparserApi();`,
+    sandbox,
+    { timeout: 1000 },
+  );
+  assert.deepEqual(accessed, []);
+  assert.equal(typeof isolated.authenticate, "object");
+  assert.equal(isolated.authenticate.type, "generic");
+  assert.deepEqual(
+    JSON.parse(JSON.stringify(isolated.authenticate)),
+    new EasyparserApi().authenticate,
+  );
+  const [apiKey] = isolated.properties;
+  assert.equal(isolated.properties.length, 1);
+  assert.equal(isolated.name, "easyparserApi");
+  assert.equal(apiKey.name, "apiKey");
+  assert.equal(apiKey.type, "string");
+  assert.equal(apiKey.typeOptions.password, true);
+  assert.equal(apiKey.required, true);
+  assert.equal(apiKey.default, "");
+  assert.deepEqual(JSON.parse(JSON.stringify(isolated.test.request)), {
+    baseURL: "https://account.easyparser.com",
+    url: "/v1/account",
+    qs: {},
+  });
+});
+
+test("all eleven realtime, both Bulk, and account routes use only easyparserApi authenticated requests", async () => {
+  const node = new Easyparser();
+  const operations = property(node, "operation").options.map(
+    (entry) => entry.value,
+  );
+  assert.equal(operations.length, 14);
+  assert.deepEqual(node.description.credentials, [
+    { name: "easyparserApi", required: true },
+  ]);
+  for (const operation of operations) {
+    const parameters =
+      operation === "BULK_SUBMIT"
+        ? bulk()
+        : operation === "BULK_GET_RESULT"
+          ? { operation, queryId: "auth-boundary-query" }
+          : operation === "ACCOUNT_INFO"
+            ? { operation }
+            : realtime(operation);
+    const run = createExecution([parameters]);
+    const output = resultItems(await run.execute());
+    assert.deepEqual(output[0].json, { request_info: { success: true } });
+    const request = requestFrom(run);
+    assert.equal(run.calls[0].kind, "authenticated", operation);
+    assert.equal(run.calls[0].credentialName, "easyparserApi", operation);
+    assert.deepEqual(
+      run.forbiddenCalls,
+      { getCredentials: 0, httpRequest: 0 },
+      operation,
+    );
+    assertNoManualAuthentication(request);
+    assert.equal(request.json, true, operation);
+  }
+});
+
+test("authentication boundary rejects manually injected key variants and credential expressions", () => {
+  const url = "https://bulk.easyparser.com/v1/bulk";
+  for (const injected of [
+    { qs: { api_key: "fixture-key" } },
+    { qs: { apiKey: "fixture-key" } },
+    { headers: { "api-key": "fixture-key" } },
+    { headers: { "API-Key": "fixture-key" } },
+    { headers: { Authorization: "Bearer fixture-key" } },
+    { body: [{ payload: { secret: "fixture-key" } }] },
+    { auth: { username: "fixture-user" } },
+    { url: `${url}?api_key=fixture-key` },
+    {
+      url: "https://fixture-user:fixture-password@bulk.easyparser.com/v1/bulk",
+    },
+    { qs: { custom: "={{$credentials.apiKey}}" } },
+    { headers: { custom: "={{$env.EASYPARSER_API_KEY}}" } },
+  ]) {
+    assert.throws(
+      () => assertNoManualAuthentication({ url, ...injected }),
+      /must not/i,
+    );
+  }
+});
+
+test("Bulk requests preserve POST body, GET result query, and non-secret headers before credential injection", async () => {
+  const submit = createExecution([bulk()]);
+  await submit.execute();
+  assert.deepEqual(requestFrom(submit), {
+    method: "POST",
+    url: "https://bulk.easyparser.com/v1/bulk",
+    headers: { "Content-Type": "application/json" },
+    body: [
+      {
+        platform: "AMZ",
+        operation: "DETAIL",
+        domain: ".com",
+        callback_url: "https://workflow.example.test/easyparser-callback",
+        payload: { asins: [ASIN] },
+      },
+    ],
+    json: true,
+    timeout: 60000,
+  });
+  const result = createExecution([
+    { operation: "BULK_GET_RESULT", queryId: "auth-query" },
+  ]);
+  await result.execute();
+  assert.deepEqual(requestFrom(result), {
+    method: "GET",
+    url: "https://data.easyparser.com/v1/queries/auth-query/results",
+    qs: { format: "json" },
+    json: true,
+    timeout: 60000,
   });
 });
 
@@ -788,7 +990,7 @@ test("pending, partial bulk outcomes, and account responses remain raw successfu
   const pending = createExecution(
     [{ operation: "BULK_GET_RESULT", queryId: "pending-query" }],
     {
-      plainResponse: bulkPendingResponse,
+      authResponse: bulkPendingResponse,
     },
   );
   assert.deepEqual(
@@ -797,7 +999,7 @@ test("pending, partial bulk outcomes, and account responses remain raw successfu
   );
 
   const partial = createExecution([bulk()], {
-    plainResponse: bulkPartialResponse,
+    authResponse: bulkPartialResponse,
   });
   assert.deepEqual(
     resultItems(await partial.execute())[0].json,
@@ -875,10 +1077,50 @@ test("every API request uses a 60-second timeout", async () => {
 
 test("transport errors are not retried for Bulk Submit", async () => {
   const run = createExecution([bulk()], {
-    plainResponse: new Error("network unavailable"),
+    authResponse: new Error("network unavailable"),
   });
   await assert.rejects(run.execute(), /network unavailable/i);
   assert.equal(run.calls.length, 1);
+  assert.equal(run.calls[0].kind, "authenticated");
+  assert.equal(run.calls[0].credentialName, "easyparserApi");
+  assert.deepEqual(run.forbiddenCalls, { getCredentials: 0, httpRequest: 0 });
+});
+
+test("authenticated transport errors are not retried or downgraded to plain HTTP on any API route", async () => {
+  for (const parameters of [
+    realtime("DETAIL"),
+    bulk(),
+    { operation: "BULK_GET_RESULT", queryId: "failed-auth-query" },
+    { operation: "ACCOUNT_INFO" },
+  ]) {
+    for (const continueOnFail of [false, true]) {
+      const run = createExecution([parameters], {
+        authResponse: new Error("authenticated network unavailable"),
+        continueOnFail,
+      });
+      if (continueOnFail) {
+        const output = resultItems(await run.execute());
+        assert.equal(output.length, 1);
+        assert.match(
+          output[0].json.error,
+          /authenticated network unavailable/i,
+        );
+        assert.deepEqual(output[0].pairedItem, { item: 0 });
+      } else {
+        await assert.rejects(
+          run.execute(),
+          /authenticated network unavailable/i,
+        );
+      }
+      requestFrom(run);
+      assert.equal(run.calls[0].kind, "authenticated");
+      assert.equal(run.calls[0].credentialName, "easyparserApi");
+      assert.deepEqual(run.forbiddenCalls, {
+        getCredentials: 0,
+        httpRequest: 0,
+      });
+    }
+  }
 });
 
 test("legacy OFFER and SELLER_PRODUCTS pagination is retained without an invented five-page cap", async () => {
@@ -936,7 +1178,7 @@ test("documented array error_details messages are retained in real-time and nest
   const nested = createExecution(
     [{ operation: "BULK_GET_RESULT", queryId: "failed-fixture-query" }],
     {
-      plainResponse: {
+      authResponse: {
         success: true,
         data: { status: "failure", json_result: response },
       },
