@@ -1,6 +1,17 @@
 # Changelog
 
-## 0.3.0 — prepared 2026-10-21
+## 0.3.1 — prepared 2026-11-04
+
+### Security
+
+- Route BULK_SUBMIT and BULK_GET_RESULT through n8n's `httpRequestWithAuthentication` helper, as required by the n8n update review.
+- Remove direct credential access and raw API-key injection from node execution.
+- Define the required `api-key` header in the generic credential authentication configuration while retaining `api_key` query authentication required by real-time/account endpoints. n8n manages both channels using the existing saved credential.
+- Add offline regression coverage that forbids plain HTTP helpers or direct credential reads and preserves Bulk request bodies, query parameters, failures and timeout behavior.
+
+No new saved credential type, API retries or data-output changes are introduced. npm publication and n8n verification approval are separate steps.
+
+## 0.3.0 — published 2026-11-04
 
 ### Added
 
@@ -30,7 +41,7 @@ The node name, saved parameter identifiers, raw JSON output and paired input ite
 
 BEST_SELLERS_RANK version 2 becomes the API's Live response on November 1, 2026. This package lets workflows test it early, but does not fabricate fields removed by the API or permanently pin the old response. External workflows must update their field mappings. Product Lookup image strings marked for removal also require downstream preparation.
 
-This version entry describes prepared source changes, not proof of npm publication. Live API or production n8n verification is separate from the offline suite.
+Published through [GitHub Actions with provenance](https://github.com/easyparser-com/n8n-nodes-easyparser/actions/runs/41873833263). Live API or production n8n verification is separate from the offline suite.
 
 ## 0.2.18
 

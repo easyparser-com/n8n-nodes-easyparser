@@ -8,6 +8,8 @@ In your n8n instance, open **Settings → Community Nodes** and install `n8n-nod
 
 Version `0.3.0` adds current API-contract support. Read [the migration guide](docs/MIGRATION-0.3.0.md) before upgrading an existing workflow. The node keeps its existing name, field identifiers, raw JSON output and input-item pairing.
 
+Version `0.3.1` fixes the Bulk authentication issue identified during n8n's update review. All operations use n8n's credential-aware HTTP helper, without manually reading or injecting your key in node execution. The generic credential defines both the `api_key` query field required by real-time/account and the `api-key` header required by Bulk/data. Existing saved credentials remain compatible; no new key or credential type is needed. npm publication does not by itself mean that n8n has approved a new verified version.
+
 ## Operations
 
 Real-time operations are Product Detail (`DETAIL`), Product Offers (`OFFER`), Search (`SEARCH`), Sales Analysis History (`SALES_ANALYSIS_HISTORY`), Best Sellers Rank (`BEST_SELLERS_RANK`), Package Dimension (`PACKAGE_DIMENSION`), Product Lookup (`PRODUCT_LOOKUP`), Seller Profile (`SELLER_PROFILE`), Seller Products (`SELLER_PRODUCTS`), Seller Feedback (`SELLER_FEEDBACK`) and Similar Products (`SIMILAR_PRODUCTS`).
